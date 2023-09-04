@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>firebase-sign-in</title>
+    <!--font awesome-cdn-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!--customize-css-->
+    <link rel=" stylesheet" type="text/css" href="./style.css" />
+  </head>
+  <body>
+    <div class="nav-ctn">
+      <h1 id="user">User</h1>
+    </div>
+    <div class="main-ctn">
+      <button id="btn-google-sign-in" class="btn-google-sign-in">
+        Sign In With Google
+      </button>
+    </div>
+    <script src="./firebase.js" type="module"></script>
+
+    <script src="./functions.js" type="module"></script>
+
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>
