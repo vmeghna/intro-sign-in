@@ -5,7 +5,15 @@ import {
   GoogleAuthProvider,
   getAuth,
   signInWithPopup,
+  createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+} from " https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore.js ";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,7 +34,62 @@ const jsAuth = getAuth(jsApp);
 const jsGoogleAuthProvider = new GoogleAuthProvider();
 
 //create a authentication method function for google provider//
-const signInWithGooglePopup = () =>
-  signInWithPopup(jsAuth, jsGoogleAuthProvider);
+const signInWithPopupGoogleProvider = async () =>
+  await signInWithPopup(jsAuth, jsGoogleAuthProvider);
 
-export { jsApp, signInWithGooglePopup };
+//create authentication method function for  email/password provider//
+//create a method function for userCreation using email and password
+const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(jsAuth, email, password);
+};
+
+//create a method function for signInWithEmail and Password
+// const signInAuthUserWithEmailAndPassword = async (email, password) => {
+//   if (!email || !password) return;
+//   return signInWithEmailAndPassword(commerceAuth, email, password);
+// };
+
+// Initialize cloud firestore and get reference to the service//
+const jsDb = getFirestore(jsApp);
+
+//create user document
+const createUserDocumentFromAuth = async (
+  userAuth,
+  additionInformation = {}
+) => {
+  if (!userAuth) return;
+
+  const userDocRef = doc(jsDb, "users", userAuth.uid);
+  console.log(userDocRef);
+
+  const userSnapShot = await getDoc(userDocRef);
+
+  console.log(userSnapShot);
+  console.log(userSnapShot.exists());
+
+  if (!userSnapShot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additionInformation,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return userDocRef;
+};
+
+export {
+  jsApp,
+  signInWithPopupGoogleProvider,
+  createUserDocumentFromAuth,
+  createAuthUserWithEmailAndPassword,
+};

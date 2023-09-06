@@ -1,10 +1,18 @@
 "use strict";
-import { signInWithGooglePopup } from "./firebase.js";
-const userEl = document.getElementById("user"),
-  btnSignInWithGoogle = document.getElementById("btn-google-sign-in");
+import {
+  signInWithPopupGoogleProvider,
+  createUserDocumentFromAuth,
+} from "./firebase.js";
+const usernameEl = document.getElementById("username");
 
-btnSignInWithGoogle.addEventListener("click", async () => {
-  const { user } = await signInWithGooglePopup();
+const signInBtn = document.getElementById("signIn");
+
+//function
+const init = () => {};
+
+//events
+signInBtn.addEventListener("click", async () => {
+  const { user } = await signInWithPopupGoogleProvider();
 
   const { displayName, email } = user;
 
@@ -12,6 +20,11 @@ btnSignInWithGoogle.addEventListener("click", async () => {
     displayName,
     email,
   };
-
+  console.log(user);
   console.log(newUser);
+
+  createUserDocumentFromAuth(user);
+  usernameEl.innerText = newUser.displayName;
 });
+//initial settings
+init();
